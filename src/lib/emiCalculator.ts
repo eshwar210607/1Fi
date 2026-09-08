@@ -41,13 +41,34 @@ export function calculateEMIForPlan(price: number, plan: EMIPlan): CalculatedEMI
 }
 
 /**
- * Calculates lowest monthly EMI across all available plans for product display cards.
+ * Generates a 1-Month Full Payment / Single Settlement option (0% interest, pay next month)
+ */
+export function getPayInFullPlan(price: number): CalculatedEMI {
+  return {
+    planId: "pay-in-full-30d",
+    tenureMonths: 1,
+    monthlyPayment: price,
+    interestRate: 0,
+    isNoCost: true,
+    totalPayment: price,
+    cashbackAmount: 0,
+    cashbackText: "0% interest · 1-time full settlement in 30 days",
+    effectiveMonthlyPayment: price,
+  };
+}
+
+/**
+ * Calculates lowest monthly EMI across multi-month plans for product display cards.
  */
 export function getStartingMonthlyEMI(price: number, plans: EMIPlan[]): number {
   if (!plans || plans.length === 0) {
     return Math.round(price / 24);
   }
-  const emiValues = plans.map((plan) => calculateEMIForPlan(price, plan).monthlyPayment);
+  // Filter for multi-month installment plans
+  const installmentPlans = plans.filter((p) => p.tenureMonths > 1);
+  const emiValues = (installmentPlans.length > 0 ? installmentPlans : plans).map(
+    (plan) => calculateEMIForPlan(price, plan).monthlyPayment
+  );
   return Math.min(...emiValues);
 }
 
