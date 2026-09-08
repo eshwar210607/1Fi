@@ -32,15 +32,15 @@ export const EMIPlanSelector: React.FC<EMIPlanSelectorProps> = ({
 
   // Generate 1Fi standard tenures: 3, 6, 9, 12, 18, 24, 36, 48, 60 months
   const standardTenures = [
-    { months: 3, rate: 0, isNoCost: true, cashback: 7500 },
-    { months: 6, rate: 0, isNoCost: true, cashback: 7500 },
-    { months: 9, rate: 0, isNoCost: true, cashback: 7500 },
-    { months: 12, rate: 0, isNoCost: true, cashback: 7500 },
-    { months: 18, rate: 0, isNoCost: true, cashback: 7500 },
-    { months: 24, rate: 0, isNoCost: true, cashback: 7500 },
-    { months: 36, rate: 7.49, isNoCost: false, cashback: 7500 },
-    { months: 48, rate: 7.99, isNoCost: false, cashback: 7500 },
-    { months: 60, rate: 8.49, isNoCost: false, cashback: 7500 },
+    { months: 3, rate: 0, isNoCost: true },
+    { months: 6, rate: 0, isNoCost: true },
+    { months: 9, rate: 0, isNoCost: true },
+    { months: 12, rate: 0, isNoCost: true },
+    { months: 18, rate: 0, isNoCost: true },
+    { months: 24, rate: 0, isNoCost: true },
+    { months: 36, rate: 7.49, isNoCost: false },
+    { months: 48, rate: 7.99, isNoCost: false },
+    { months: 60, rate: 8.49, isNoCost: false },
   ];
 
   const calculatedPlans: CalculatedEMI[] = standardTenures.map((item) => {
@@ -63,9 +63,8 @@ export const EMIPlanSelector: React.FC<EMIPlanSelectorProps> = ({
       interestRate: item.rate,
       isNoCost: item.isNoCost,
       totalPayment: total,
-      cashbackAmount: item.cashback,
-      cashbackText: `Additional cashback of ₹${formatINR(item.cashback)}`,
-      effectiveMonthlyPayment: Math.round((price - item.cashback) / item.months),
+      cashbackAmount: 0,
+      effectiveMonthlyPayment: monthly,
     };
   });
 
@@ -225,11 +224,6 @@ export const EMIPlanSelector: React.FC<EMIPlanSelectorProps> = ({
                         <span className="text-xs sm:text-[13px] font-medium text-gray-800">
                           {plan.tenureMonths} months · {plan.interestRate === 0 ? "0% p.a." : `${plan.interestRate}% p.a.`}
                         </span>
-                        {plan.cashbackText && (
-                          <span className="block text-[10px] text-emerald-600 font-semibold mt-0.5">
-                            {plan.cashbackText}
-                          </span>
-                        )}
                       </div>
                     </div>
 

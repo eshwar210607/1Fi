@@ -5,7 +5,6 @@ import { CalculatedEMI, EMIPlan } from "@/types";
  * Matches 1Fi's fintech logic:
  * - 0% interest no-cost EMIs (interest waived or subsidized)
  * - Flat / Reducing interest options for extended tenures (36m, 48m, 60m)
- * - Cashback breakdown
  */
 export function calculateEMIForPlan(price: number, plan: EMIPlan): CalculatedEMI {
   let monthlyPayment = 0;
@@ -23,10 +22,6 @@ export function calculateEMIForPlan(price: number, plan: EMIPlan): CalculatedEMI
     monthlyPayment = Math.round(totalPayment / plan.tenureMonths);
   }
 
-  const cashbackAmount = plan.cashbackAmount || 0;
-  const effectivePrice = Math.max(0, price - cashbackAmount);
-  const effectiveMonthlyPayment = Math.round(effectivePrice / plan.tenureMonths);
-
   return {
     planId: plan.id,
     tenureMonths: plan.tenureMonths,
@@ -34,9 +29,8 @@ export function calculateEMIForPlan(price: number, plan: EMIPlan): CalculatedEMI
     interestRate: plan.interestRate,
     isNoCost: plan.isNoCost,
     totalPayment,
-    cashbackAmount,
-    cashbackText: plan.cashbackText,
-    effectiveMonthlyPayment,
+    cashbackAmount: 0,
+    effectiveMonthlyPayment: monthlyPayment,
   };
 }
 
@@ -52,7 +46,6 @@ export function getPayInFullPlan(price: number): CalculatedEMI {
     isNoCost: true,
     totalPayment: price,
     cashbackAmount: 0,
-    cashbackText: "0% interest · 1-time full settlement in 30 days",
     effectiveMonthlyPayment: price,
   };
 }

@@ -213,11 +213,6 @@ export const PledgeSummaryModal: React.FC<PledgeSummaryModalProps> = ({
                     {emiPlan.tenureMonths} Months
                   </span>
                 </div>
-                {emiPlan.cashbackText && (
-                  <div className="text-[11px] font-bold text-emerald-700">
-                    ✓ {emiPlan.cashbackText}
-                  </div>
-                )}
               </div>
 
               {/* Mutual Fund Collateral Calculation */}

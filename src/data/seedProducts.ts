@@ -82,8 +82,6 @@ export const products: Product[] = [
         tenureMonths: 3,
         interestRate: 0,
         isNoCost: true,
-        cashbackAmount: 7500,
-        cashbackText: "Additional cashback of ₹7,500",
         processingFee: 0,
       },
       {
@@ -91,8 +89,6 @@ export const products: Product[] = [
         tenureMonths: 6,
         interestRate: 0,
         isNoCost: true,
-        cashbackAmount: 7500,
-        cashbackText: "Additional cashback of ₹7,500",
         processingFee: 0,
       },
       {
@@ -100,8 +96,6 @@ export const products: Product[] = [
         tenureMonths: 12,
         interestRate: 0,
         isNoCost: true,
-        cashbackAmount: 7500,
-        cashbackText: "Additional cashback of ₹7,500",
         processingFee: 0,
       },
       {
@@ -109,8 +103,6 @@ export const products: Product[] = [
         tenureMonths: 24,
         interestRate: 0,
         isNoCost: true,
-        cashbackAmount: 7500,
-        cashbackText: "Additional cashback of ₹7,500",
         processingFee: 0,
       },
       {
@@ -118,8 +110,6 @@ export const products: Product[] = [
         tenureMonths: 36,
         interestRate: 10.5,
         isNoCost: false,
-        cashbackAmount: 7500,
-        cashbackText: "Additional cashback of ₹7,500",
         processingFee: 0,
       },
       {
@@ -127,8 +117,6 @@ export const products: Product[] = [
         tenureMonths: 48,
         interestRate: 10.5,
         isNoCost: false,
-        cashbackAmount: 7500,
-        cashbackText: "Additional cashback of ₹7,500",
         processingFee: 0,
       },
       {
@@ -136,8 +124,6 @@ export const products: Product[] = [
         tenureMonths: 60,
         interestRate: 10.5,
         isNoCost: false,
-        cashbackAmount: 7500,
-        cashbackText: "Additional cashback of ₹7,500",
         processingFee: 0,
       },
     ],
@@ -208,8 +194,6 @@ export const products: Product[] = [
         tenureMonths: 3,
         interestRate: 0,
         isNoCost: true,
-        cashbackAmount: 5000,
-        cashbackText: "Additional cashback of ₹5,000",
         processingFee: 0,
       },
       {
@@ -217,8 +201,6 @@ export const products: Product[] = [
         tenureMonths: 6,
         interestRate: 0,
         isNoCost: true,
-        cashbackAmount: 5000,
-        cashbackText: "Additional cashback of ₹5,000",
         processingFee: 0,
       },
       {
@@ -226,8 +208,6 @@ export const products: Product[] = [
         tenureMonths: 12,
         interestRate: 0,
         isNoCost: true,
-        cashbackAmount: 5000,
-        cashbackText: "Additional cashback of ₹5,000",
         processingFee: 0,
       },
       {
@@ -235,8 +215,6 @@ export const products: Product[] = [
         tenureMonths: 24,
         interestRate: 0,
         isNoCost: true,
-        cashbackAmount: 5000,
-        cashbackText: "Additional cashback of ₹5,000",
         processingFee: 0,
       },
       {
@@ -244,8 +222,6 @@ export const products: Product[] = [
         tenureMonths: 36,
         interestRate: 10.5,
         isNoCost: false,
-        cashbackAmount: 5000,
-        cashbackText: "Additional cashback of ₹5,000",
         processingFee: 0,
       },
     ],
@@ -314,8 +290,6 @@ export const products: Product[] = [
         tenureMonths: 6,
         interestRate: 0,
         isNoCost: true,
-        cashbackAmount: 10000,
-        cashbackText: "Additional cashback of ₹10,000",
         processingFee: 0,
       },
       {
@@ -323,8 +297,6 @@ export const products: Product[] = [
         tenureMonths: 12,
         interestRate: 0,
         isNoCost: true,
-        cashbackAmount: 10000,
-        cashbackText: "Additional cashback of ₹10,000",
         processingFee: 0,
       },
       {
@@ -332,8 +304,6 @@ export const products: Product[] = [
         tenureMonths: 24,
         interestRate: 0,
         isNoCost: true,
-        cashbackAmount: 10000,
-        cashbackText: "Additional cashback of ₹10,000",
         processingFee: 0,
       },
       {
@@ -341,8 +311,6 @@ export const products: Product[] = [
         tenureMonths: 36,
         interestRate: 10.5,
         isNoCost: false,
-        cashbackAmount: 10000,
-        cashbackText: "Additional cashback of ₹10,000",
         processingFee: 0,
       },
     ],
@@ -413,8 +381,6 @@ export const products: Product[] = [
         tenureMonths: 3,
         interestRate: 0,
         isNoCost: true,
-        cashbackAmount: 2000,
-        cashbackText: "Additional cashback of ₹2,000",
         processingFee: 0,
       },
       {
@@ -422,8 +388,6 @@ export const products: Product[] = [
         tenureMonths: 6,
         interestRate: 0,
         isNoCost: true,
-        cashbackAmount: 2000,
-        cashbackText: "Additional cashback of ₹2,000",
         processingFee: 0,
       },
       {
@@ -431,8 +395,6 @@ export const products: Product[] = [
         tenureMonths: 12,
         interestRate: 0,
         isNoCost: true,
-        cashbackAmount: 2000,
-        cashbackText: "Additional cashback of ₹2,000",
         processingFee: 0,
       },
     ],
@@ -501,8 +463,6 @@ export const products: Product[] = [
         tenureMonths: 3,
         interestRate: 0,
         isNoCost: true,
-        cashbackAmount: 4000,
-        cashbackText: "Additional cashback of ₹4,000",
         processingFee: 0,
       },
       {
@@ -510,8 +470,6 @@ export const products: Product[] = [
         tenureMonths: 6,
         interestRate: 0,
         isNoCost: true,
-        cashbackAmount: 4000,
-        cashbackText: "Additional cashback of ₹4,000",
         processingFee: 0,
       },
       {
@@ -519,8 +477,6 @@ export const products: Product[] = [
         tenureMonths: 12,
         interestRate: 0,
         isNoCost: true,
-        cashbackAmount: 4000,
-        cashbackText: "Additional cashback of ₹4,000",
         processingFee: 0,
       },
       {
@@ -528,8 +484,6 @@ export const products: Product[] = [
         tenureMonths: 24,
         interestRate: 0,
         isNoCost: true,
-        cashbackAmount: 4000,
-        cashbackText: "Additional cashback of ₹4,000",
         processingFee: 0,
       },
     ],
@@ -598,8 +552,6 @@ export const products: Product[] = [
         tenureMonths: 3,
         interestRate: 0,
         isNoCost: true,
-        cashbackAmount: 3000,
-        cashbackText: "Additional cashback of ₹3,000",
         processingFee: 0,
       },
       {
@@ -607,8 +559,6 @@ export const products: Product[] = [
         tenureMonths: 6,
         interestRate: 0,
         isNoCost: true,
-        cashbackAmount: 3000,
-        cashbackText: "Additional cashback of ₹3,000",
         processingFee: 0,
       },
       {
@@ -616,8 +566,6 @@ export const products: Product[] = [
         tenureMonths: 12,
         interestRate: 0,
         isNoCost: true,
-        cashbackAmount: 3000,
-        cashbackText: "Additional cashback of ₹3,000",
         processingFee: 0,
       },
     ],
