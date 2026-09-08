@@ -16,6 +16,7 @@ import {
   Sparkles,
   Info,
 } from "lucide-react";
+import { TermsBottomSheet } from "../brand-voucher/TermsBottomSheet";
 
 interface ProductDetailViewProps {
   product: Product;
@@ -48,6 +49,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
   );
   const [selectedPlan, setSelectedPlan] = useState<CalculatedEMI>(initialCalculated);
   const [isPledgeModalOpen, setIsPledgeModalOpen] = useState(false);
+  const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [shareSuccess, setShareSuccess] = useState(false);
 
   // When variant changes, update selected plan calculations with new price
@@ -190,7 +192,44 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
             ))}
           </div>
         </div>
+
+        {/* Terms and Conditions Card Matching Image 3 */}
+        <div className="bg-white rounded-3xl p-5 border border-gray-100 shadow-card space-y-3">
+          <h4 className="text-sm font-bold text-gray-900">Terms and Conditions</h4>
+          <div className="space-y-2.5">
+            <div className="flex items-start gap-2.5 text-xs sm:text-[13px] text-gray-600 leading-relaxed">
+              <span className="text-[#601CEB] font-bold">✓</span>
+              <p>Comes with 12 months official manufacturer warranty across India.</p>
+            </div>
+            <div className="flex items-start gap-2.5 text-xs sm:text-[13px] text-gray-600 leading-relaxed">
+              <span className="text-[#601CEB] font-bold">✓</span>
+              <p>Zero foreclosure charges if you decide to pay your EMI dues early.</p>
+            </div>
+            <div className="flex items-start gap-2.5 text-xs sm:text-[13px] text-gray-600 leading-relaxed">
+              <span className="text-[#601CEB] font-bold">✓</span>
+              <p>Mutual Fund units remain 100% invested in your folio and continue earning returns.</p>
+            </div>
+          </div>
+
+          <div className="pt-2 border-t border-gray-100">
+            <button
+              type="button"
+              onClick={() => setIsTermsOpen(true)}
+              className="flex items-center justify-between w-full text-xs font-bold text-[#601CEB] hover:text-[#4E12C8] py-1"
+            >
+              <span>View All</span>
+              <span className="text-sm font-extrabold">›</span>
+            </button>
+          </div>
+        </div>
       </div>
+
+      {/* Terms Bottom Sheet Modal Matching Image 4 */}
+      <TermsBottomSheet
+        isOpen={isTermsOpen}
+        onClose={() => setIsTermsOpen(false)}
+        brandName={product.name}
+      />
 
       {/* Sticky Bottom Action Bar (Proceed with selected plan CTA) */}
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-gray-100 px-4 py-3 shadow-elevated">

@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { Search, Plane, Smartphone, Sparkles, Tv, ArrowRight, ShieldCheck } from "lucide-react";
+import { Search, ArrowRight } from "lucide-react";
+import { BrandVoucherDetailView } from "../brand-voucher/BrandVoucherDetailView";
 
 interface TopBrandsViewProps {
   onSwitchToMarketplace: () => void;
@@ -9,16 +10,9 @@ interface TopBrandsViewProps {
 
 export const TopBrandsView: React.FC<TopBrandsViewProps> = ({ onSwitchToMarketplace }) => {
   const [search, setSearch] = useState("");
+  const [selectedBrand, setSelectedBrand] = useState<any | null>(null);
 
   const brands = [
-    {
-      id: "air-india",
-      name: "Air India",
-      emi: "No-cost EMIs upto 18 months",
-      iconBg: "#D91B24",
-      iconText: "AI",
-      category: "Travel",
-    },
     {
       id: "apple-reseller",
       name: "Apple Premium Reseller",
@@ -26,6 +20,14 @@ export const TopBrandsView: React.FC<TopBrandsViewProps> = ({ onSwitchToMarketpl
       iconBg: "#000000",
       iconText: "",
       category: "Electronics",
+    },
+    {
+      id: "air-india",
+      name: "Air India",
+      emi: "No-cost EMIs upto 18 months",
+      iconBg: "#D91B24",
+      iconText: "AI",
+      category: "Travel",
     },
     {
       id: "caratlane",
@@ -65,6 +67,15 @@ export const TopBrandsView: React.FC<TopBrandsViewProps> = ({ onSwitchToMarketpl
     b.name.toLowerCase().includes(search.toLowerCase())
   );
 
+  if (selectedBrand) {
+    return (
+      <BrandVoucherDetailView
+        brand={selectedBrand}
+        onBack={() => setSelectedBrand(null)}
+      />
+    );
+  }
+
   return (
     <div className="flex-1 flex flex-col bg-[#F8F9FB] pb-8">
       {/* Search Bar */}
@@ -88,7 +99,7 @@ export const TopBrandsView: React.FC<TopBrandsViewProps> = ({ onSwitchToMarketpl
             Existing 1Fi Partner Brands
           </span>
           <span className="text-[11px] text-gray-500">
-            Reference tab from the 1Fi app experience
+            Click any brand to view the Voucher & EMI flow
           </span>
         </div>
         <button
@@ -106,7 +117,7 @@ export const TopBrandsView: React.FC<TopBrandsViewProps> = ({ onSwitchToMarketpl
           <div
             key={brand.id}
             className="p-3.5 bg-white rounded-2xl border border-gray-100 shadow-card flex items-center justify-between gap-3 hover:border-purple-200 transition-colors cursor-pointer"
-            onClick={onSwitchToMarketplace}
+            onClick={() => setSelectedBrand(brand)}
           >
             <div className="flex items-center gap-3">
               <div
