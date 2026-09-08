@@ -154,3 +154,4 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({ onSelectProduct 
     </div>
   );
 };
+

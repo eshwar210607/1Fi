@@ -241,3 +241,4 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
     </div>
   );
 };
+
