@@ -3,7 +3,14 @@
 import React, { useState } from "react";
 import { EMIPlan, CalculatedEMI } from "@/types";
 import { calculateEMIForPlan, getPayInFullPlan, formatINR } from "@/lib/emiCalculator";
-import { Sparkles, CheckCircle2, Circle, Calendar, CreditCard } from "lucide-react";
+import {
+  ChevronUp,
+  ChevronDown,
+  CheckCircle2,
+  Circle,
+  Calendar,
+  CreditCard,
+} from "lucide-react";
 
 interface EMIPlanSelectorProps {
   price: number;
@@ -20,50 +27,93 @@ export const EMIPlanSelector: React.FC<EMIPlanSelectorProps> = ({
   selectedPlanId,
   onSelectPlan,
 }) => {
+  const [showPlans, setShowPlans] = useState<boolean>(true);
   const [paymentMode, setPaymentMode] = useState<"emi" | "full">("emi");
 
-  // Calculate standard multi-month plans
-  const calculatedPlans: CalculatedEMI[] = plans.map((plan) =>
-    calculateEMIForPlan(price, plan)
-  );
+  // Generate 1Fi standard tenures: 3, 6, 9, 12, 18, 24, 36, 48, 60 months
+  const standardTenures = [
+    { months: 3, rate: 0, isNoCost: true, cashback: 7500 },
+    { months: 6, rate: 0, isNoCost: true, cashback: 7500 },
+    { months: 9, rate: 0, isNoCost: true, cashback: 7500 },
+    { months: 12, rate: 0, isNoCost: true, cashback: 7500 },
+    { months: 18, rate: 0, isNoCost: true, cashback: 7500 },
+    { months: 24, rate: 0, isNoCost: true, cashback: 7500 },
+    { months: 36, rate: 7.49, isNoCost: false, cashback: 7500 },
+    { months: 48, rate: 7.99, isNoCost: false, cashback: 7500 },
+    { months: 60, rate: 8.49, isNoCost: false, cashback: 7500 },
+  ];
+
+  const calculatedPlans: CalculatedEMI[] = standardTenures.map((item) => {
+    let monthly = 0;
+    let total = 0;
+    if (item.rate === 0) {
+      monthly = Math.round(price / item.months);
+      total = price;
+    } else {
+      const annualRate = item.rate / 100;
+      const totalInterest = price * annualRate * (item.months / 12);
+      total = Math.round(price + totalInterest);
+      monthly = Math.round(total / item.months);
+    }
+
+    return {
+      planId: `plan-${item.months}m`,
+      tenureMonths: item.months,
+      monthlyPayment: monthly,
+      interestRate: item.rate,
+      isNoCost: item.isNoCost,
+      totalPayment: total,
+      cashbackAmount: item.cashback,
+      cashbackText: `Additional cashback of ₹${formatINR(item.cashback)}`,
+      effectiveMonthlyPayment: Math.round((price - item.cashback) / item.months),
+    };
+  });
 
   const fullPlan = getPayInFullPlan(price);
+  const lowestMonthly = calculatedPlans[calculatedPlans.length - 1]?.monthlyPayment || 1026;
 
   const handleModeChange = (mode: "emi" | "full") => {
     setPaymentMode(mode);
     if (mode === "full") {
       onSelectPlan(fullPlan);
     } else {
-      onSelectPlan(calculatedPlans[0]);
+      onSelectPlan(calculatedPlans[1] || calculatedPlans[0]);
     }
   };
 
   return (
-    <div className="mt-4">
-      {/* Header Matching Reference Assignment Spec */}
-      <div className="mb-3">
-        <div className="flex items-baseline gap-2">
-          <span className="text-2xl font-extrabold text-gray-950 tracking-tight">
-            ₹{formatINR(price)}
+    <div className="space-y-3">
+      {/* Price Header Section */}
+      <div className="text-center pt-1 pb-1">
+        <p className="text-xs font-semibold text-gray-500">
+          Up to 60 months EMIs
+        </p>
+        <p className="text-[11px] font-medium text-gray-400 mt-0.5">
+          Enter the purchase amount · ₹1,000 – ₹10,00,000
+        </p>
+
+        {/* Large Amount Display matching Image 1 */}
+        <div className="pt-2 pb-1 flex items-baseline justify-center gap-2">
+          <span className="text-2xl sm:text-3xl font-semibold text-gray-400">
+            ₹
           </span>
-          <span className="text-xs text-gray-400 line-through font-medium">
-            ₹{formatINR(mrp)}
+          <span className="text-3xl sm:text-4xl font-black text-gray-950 tracking-tight">
+            {formatINR(price)}
           </span>
-        </div>
-        <div className="flex items-center gap-1.5 mt-1">
-          <Sparkles className="w-3.5 h-3.5 text-[#601CEB]" />
-          <span className="text-xs font-bold text-[#601CEB] tracking-tight">
-            Payment options backed by mutual funds
-          </span>
+          {mrp > price && (
+            <span className="text-xs text-gray-400 line-through font-medium ml-1">
+              ₹{formatINR(mrp)}
+            </span>
+          )}
         </div>
       </div>
 
-      {/* Payment Mode Switcher (EMIs vs Pay in Full) */}
-      <div className="flex items-center p-1 bg-gray-100/80 rounded-2xl mb-3.5 text-xs font-bold">
+      {/* Mode Switcher: EMIs vs Pay in Full */}
+      <div className="flex items-center p-1 bg-gray-100/90 rounded-2xl text-xs font-bold">
         <button
           type="button"
           onClick={() => handleModeChange("emi")}
-          className={`flex-1 py-2.5 rounded-xl flex items-center justify-center gap-1.5 transition-all ${
+          className={`flex-1 py-2 rounded-xl flex items-center justify-center gap-1.5 transition-all ${
             paymentMode === "emi"
               ? "bg-white text-[#601CEB] shadow-sm"
               : "text-gray-500 hover:text-gray-800"
@@ -76,7 +126,7 @@ export const EMIPlanSelector: React.FC<EMIPlanSelectorProps> = ({
         <button
           type="button"
           onClick={() => handleModeChange("full")}
-          className={`flex-1 py-2.5 rounded-xl flex items-center justify-center gap-1.5 transition-all ${
+          className={`flex-1 py-2 rounded-xl flex items-center justify-center gap-1.5 transition-all ${
             paymentMode === "full"
               ? "bg-white text-[#601CEB] shadow-sm"
               : "text-gray-500 hover:text-gray-800"
@@ -87,108 +137,114 @@ export const EMIPlanSelector: React.FC<EMIPlanSelectorProps> = ({
         </button>
       </div>
 
-      {/* Mode 1: Pay in Full (Single 30-Day Payment) */}
+      {/* Mode 1: Pay in Full */}
       {paymentMode === "full" && (
         <div
           onClick={() => onSelectPlan(fullPlan)}
-          className="p-4 rounded-2xl border border-[#601CEB] bg-purple-50/60 shadow-sm transition-all cursor-pointer space-y-3"
+          className="p-4 rounded-2xl border border-[#601CEB] bg-purple-50/60 shadow-sm transition-all cursor-pointer space-y-2"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-5 h-5 text-[#601CEB] fill-purple-100" />
               <div>
                 <h4 className="text-sm font-extrabold text-gray-900">
-                  Single Full Payment (30-Day Settlement)
+                  Single Full Payment (30 Days)
                 </h4>
                 <p className="text-[11px] text-gray-500 font-medium">
-                  Pay full amount after 30 days · No bank debit today
+                  Settle after 30 days · Backed by Mutual Funds
                 </p>
               </div>
             </div>
-            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
               0% Interest
             </span>
           </div>
-
-          <div className="pt-2 border-t border-purple-100/80 flex items-baseline justify-between">
-            <div>
-              <span className="text-[11px] text-gray-500">Amount Due:</span>
-              <div className="text-xl font-black text-gray-950">
-                ₹{formatINR(price)}
-              </div>
-            </div>
-            <div className="text-right text-[11px] text-gray-500">
-              <span>Due in 30 Days</span>
-              <span className="block font-semibold text-purple-900">Zero Processing Fee</span>
-            </div>
+          <div className="pt-2 border-t border-purple-100 flex items-baseline justify-between">
+            <span className="text-xs text-gray-500 font-medium">Amount Due in 30 Days:</span>
+            <span className="text-lg font-black text-gray-950">₹{formatINR(price)}</span>
           </div>
         </div>
       )}
 
-      {/* Mode 2: Pay in Multi-Month EMIs */}
+      {/* Mode 2: Collapsible EMI Accordion matching Image 1 & 2 */}
       {paymentMode === "emi" && (
-        <div className="space-y-2.5">
-          {calculatedPlans.map((calc) => {
-            const isSelected = selectedPlanId === calc.planId;
-            return (
-              <div
-                key={calc.planId}
-                onClick={() => onSelectPlan(calc)}
-                className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
-                  isSelected
-                    ? "bg-purple-50/60 border-[#601CEB] shadow-sm ring-1 ring-purple-200"
-                    : "bg-white border-gray-200 hover:border-purple-200 hover:bg-gray-50/50"
-                }`}
-              >
-                {/* Radio Indicator */}
-                <div className="flex-shrink-0">
-                  {isSelected ? (
-                    <CheckCircle2 className="w-5 h-5 text-[#601CEB] fill-purple-100" />
-                  ) : (
-                    <Circle className="w-5 h-5 text-gray-300" />
-                  )}
-                </div>
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-card p-4">
+          {/* Header Row: Starts at ₹X,XXX/mo + Hide plans ^ / Show plans ▾ */}
+          <div
+            onClick={() => setShowPlans(!showPlans)}
+            className="flex items-center justify-between cursor-pointer select-none py-1"
+          >
+            <div className="text-xs font-medium text-gray-500">
+              Starts at{" "}
+              <strong className="text-sm font-black text-gray-900">
+                ₹{formatINR(lowestMonthly)}/mo
+              </strong>
+            </div>
 
-                {/* Monthly Payment & Tenure */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-baseline gap-1.5 flex-wrap">
-                    <span className="text-sm sm:text-base font-extrabold text-gray-900 tracking-tight">
-                      ₹{formatINR(calc.monthlyPayment)}
-                    </span>
-                    <span className="text-xs sm:text-sm font-semibold text-gray-600">
-                      x {calc.tenureMonths} months
-                    </span>
-                  </div>
+            <button
+              type="button"
+              className="flex items-center gap-1 text-xs font-bold text-[#601CEB] hover:text-[#4E12C8]"
+            >
+              <span>{showPlans ? "Hide plans" : "Show plans"}</span>
+              {showPlans ? (
+                <ChevronUp className="w-4 h-4 stroke-[2.5]" />
+              ) : (
+                <ChevronDown className="w-4 h-4 stroke-[2.5]" />
+              )}
+            </button>
+          </div>
 
-                  {calc.cashbackText && (
-                    <p className="text-[11px] font-medium text-emerald-700 mt-0.5">
-                      {calc.cashbackText}
-                    </p>
-                  )}
-                </div>
-
-                {/* Interest Tag */}
-                <div className="flex-shrink-0 text-right">
-                  <span
-                    className={`inline-block text-xs font-bold px-2.5 py-1 rounded-full border ${
-                      calc.isNoCost || calc.interestRate === 0
-                        ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                        : "bg-gray-100 text-gray-700 border-gray-200"
+          {/* Plan Rows (When Expanded) - Exact layout from Image 1 */}
+          {showPlans && (
+            <div className="mt-3 pt-2 border-t border-gray-100 divide-y divide-gray-100">
+              {calculatedPlans.map((plan) => {
+                const isSelected = selectedPlanId === plan.planId;
+                return (
+                  <div
+                    key={plan.planId}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onSelectPlan(plan);
+                    }}
+                    className={`py-3 px-2 flex items-center justify-between transition-colors cursor-pointer rounded-xl ${
+                      isSelected
+                        ? "bg-purple-50/80 font-bold"
+                        : "hover:bg-gray-50"
                     }`}
                   >
-                    {calc.isNoCost || calc.interestRate === 0
-                      ? "0% interest"
-                      : `${calc.interestRate}% interest`}
-                  </span>
-                  {calc.isNoCost && (
-                    <span className="block text-[9px] font-semibold text-gray-400 mt-0.5">
-                      No-cost EMI
-                    </span>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+                    {/* Left: Radio + Tenure & Rate */}
+                    <div className="flex items-center gap-2.5">
+                      <div className="flex-shrink-0">
+                        {isSelected ? (
+                          <CheckCircle2 className="w-4 h-4 text-[#601CEB] fill-purple-100" />
+                        ) : (
+                          <Circle className="w-4 h-4 text-gray-300" />
+                        )}
+                      </div>
+                      <div>
+                        <span className="text-xs sm:text-[13px] font-medium text-gray-800">
+                          {plan.tenureMonths} months · {plan.interestRate === 0 ? "0% p.a." : `${plan.interestRate}% p.a.`}
+                        </span>
+                        {plan.cashbackText && (
+                          <span className="block text-[10px] text-emerald-600 font-semibold mt-0.5">
+                            {plan.cashbackText}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Right: Monthly Amount */}
+                    <div className="text-right">
+                      <strong className="text-xs sm:text-[13px] font-extrabold text-gray-950">
+                        ₹{formatINR(plan.monthlyPayment)}
+                      </strong>{" "}
+                      <span className="text-gray-400 font-normal text-[11px]">/mo</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
     </div>

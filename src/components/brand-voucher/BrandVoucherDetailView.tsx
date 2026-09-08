@@ -304,3 +304,4 @@ export const BrandVoucherDetailView: React.FC<BrandVoucherDetailViewProps> = ({
     </div>
   );
 };
+

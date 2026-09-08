@@ -6,17 +6,16 @@ import { Product, ProductVariant, CalculatedEMI } from "@/types";
 import { VariantSelector } from "./VariantSelector";
 import { EMIPlanSelector } from "./EMIPlanSelector";
 import { PledgeSummaryModal } from "./PledgeSummaryModal";
+import { TermsBottomSheet } from "../brand-voucher/TermsBottomSheet";
 import { calculateEMIForPlan, formatINR } from "@/lib/emiCalculator";
 import {
   ChevronLeft,
   Share2,
-  ShieldCheck,
-  Check,
+  CheckCircle2,
+  ChevronRight,
   ArrowRight,
   Sparkles,
-  Info,
 } from "lucide-react";
-import { TermsBottomSheet } from "../brand-voucher/TermsBottomSheet";
 
 interface ProductDetailViewProps {
   product: Product;
@@ -42,7 +41,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
     }
   );
 
-  // Selected EMI plan (defaults to first or 6-month / 12-month no-cost plan)
+  // Selected EMI plan
   const initialCalculated = calculateEMIForPlan(
     selectedVariant.price,
     product.emiPlans[1] || product.emiPlans[0]
@@ -67,9 +66,25 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
     }
   };
 
+  const howToUseSteps = [
+    "Select your preferred product variant (color, finish and storage).",
+    "Choose your desired no-cost EMI tenure (3 to 60 months) or single 30-day payment.",
+    "Your mutual fund portfolio is instantly evaluated via CAMS/KFintech with zero credit score check.",
+    "A temporary pledge lock is placed on the required units without selling or breaking your investments.",
+    "Your order is processed for immediate delivery, while your mutual funds continue compounding market returns.",
+    "Pay your monthly EMI seamlessly via auto-debit or UPI on your due date.",
+    "Once the loan is fully repaid, your mutual fund pledge is immediately released.",
+  ];
+
+  const termsPoints = [
+    "Comes with 12 months official manufacturer warranty across authorized service centers in India.",
+    "Customers can foreclose or prepay the remaining balance anytime with zero pre-closure charges.",
+    "Your mutual fund portfolio remains 100% in your name, retaining dividend payouts and capital appreciation.",
+  ];
+
   return (
     <div className="min-h-screen bg-[#F8F9FB] flex flex-col justify-between">
-      {/* 1Fi App Top Header (Matches `< Pay using 1Fi` from video) */}
+      {/* 1Fi App Top Header: `< Pay using 1Fi` + Share */}
       <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-100 px-4 py-3.5 flex items-center justify-between shadow-2xs">
         <button
           onClick={onBack}
@@ -81,7 +96,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
 
         <button
           onClick={handleShare}
-          className="p-2 rounded-full text-purple-600 hover:bg-purple-50 transition-colors relative"
+          className="p-2 rounded-full text-[#601CEB] hover:bg-purple-50 transition-colors relative"
           title="Share"
         >
           <Share2 className="w-4 h-4 stroke-[2]" />
@@ -94,27 +109,27 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
       </div>
 
       {/* Main Content Scroll Area */}
-      <div className="flex-1 px-4 py-4 space-y-5 pb-32 max-w-2xl mx-auto w-full">
-        {/* Product Brand & Title */}
-        <div>
-          <div className="flex items-center gap-2 mb-1">
+      <div className="flex-1 px-4 py-4 space-y-4 pb-32 max-w-lg mx-auto w-full">
+        {/* Brand & Product Title Card */}
+        <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-card">
+          <div className="flex items-center justify-between mb-1">
             <span className="text-xs font-extrabold uppercase tracking-wider text-[#601CEB]">
               {product.brand}
             </span>
-            <span className="text-[11px] px-2 py-0.2 rounded-full bg-emerald-50 text-emerald-700 font-bold border border-emerald-100">
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-100">
               In Stock
             </span>
           </div>
-          <h1 className="text-lg sm:text-2xl font-extrabold text-gray-950 leading-snug">
+          <h1 className="text-lg sm:text-xl font-extrabold text-gray-950 leading-snug">
             {selectedVariant.name}
           </h1>
-          <p className="text-xs sm:text-sm text-gray-500 mt-1">
+          <p className="text-xs text-gray-500 mt-0.5">
             {product.tagline}
           </p>
         </div>
 
-        {/* Big Product Image Showcase */}
-        <div className="relative w-full h-64 sm:h-80 bg-white rounded-3xl border border-gray-100 shadow-card flex items-center justify-center p-4 overflow-hidden">
+        {/* Product Image Showcase */}
+        <div className="relative w-full h-60 sm:h-72 bg-white rounded-2xl border border-gray-100 shadow-card flex items-center justify-center p-4 overflow-hidden">
           <div className="absolute top-3 left-3 flex items-center gap-1 text-[11px] font-bold text-[#601CEB] bg-purple-50 px-2.5 py-1 rounded-full border border-purple-100">
             <Sparkles className="w-3 h-3 fill-[#601CEB]" />
             <span>0% No-Cost EMI</span>
@@ -125,13 +140,13 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
             alt={selectedVariant.name}
             fill
             priority
-            sizes="(max-width: 640px) 100vw, 500px"
+            sizes="(max-width: 640px) 100vw, 450px"
             className="object-contain p-4 transition-all duration-300"
           />
         </div>
 
         {/* Variant Selector (Colors + Storage) */}
-        <div className="bg-white rounded-3xl p-4 border border-gray-100 shadow-card">
+        <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-card">
           <VariantSelector
             product={product}
             selectedVariant={selectedVariant}
@@ -139,47 +154,17 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
           />
         </div>
 
-        {/* EMI Plans Table (Direct match with PDF assignment reference!) */}
-        <div className="bg-white rounded-3xl p-4 sm:p-5 border border-gray-100 shadow-card">
-          <EMIPlanSelector
-            price={selectedVariant.price}
-            mrp={selectedVariant.mrp}
-            plans={product.emiPlans}
-            selectedPlanId={selectedPlan.planId}
-            onSelectPlan={(plan) => setSelectedPlan(plan)}
-          />
-        </div>
+        {/* EMI Plans Collapsible Accordion (Matching Image 1 & 2) */}
+        <EMIPlanSelector
+          price={selectedVariant.price}
+          mrp={selectedVariant.mrp}
+          plans={product.emiPlans}
+          selectedPlanId={selectedPlan.planId}
+          onSelectPlan={(plan) => setSelectedPlan(plan)}
+        />
 
-        {/* 1Fi Advantage Banner */}
-        <div className="p-4 rounded-3xl bg-gradient-to-br from-[#1C0548] to-[#48119C] text-white space-y-3 shadow-md">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-emerald-400" />
-            <h4 className="text-sm font-bold">How 1Fi Mutual Fund EMI Works</h4>
-          </div>
-          <ul className="text-xs text-purple-100 space-y-1.5 font-normal leading-relaxed">
-            <li className="flex items-start gap-1.5">
-              <Check className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 mt-0.5" />
-              <span>
-                <strong>Zero Credit Check:</strong> Approval is guaranteed against your existing mutual funds.
-              </span>
-            </li>
-            <li className="flex items-start gap-1.5">
-              <Check className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 mt-0.5" />
-              <span>
-                <strong>No Portfolio Liquidation:</strong> Keep earning market returns while you pay EMIs.
-              </span>
-            </li>
-            <li className="flex items-start gap-1.5">
-              <Check className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 mt-0.5" />
-              <span>
-                <strong>Prepay Anytime:</strong> Zero pre-closure penalty to unpledge your funds early.
-              </span>
-            </li>
-          </ul>
-        </div>
-
-        {/* Specifications & Highlights */}
-        <div className="bg-white rounded-3xl p-5 border border-gray-100 shadow-card space-y-3">
+        {/* Specifications & Features */}
+        <div className="bg-white rounded-2xl p-4 sm:p-5 border border-gray-100 shadow-card space-y-3">
           <h4 className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-gray-800">
             Specifications & Features
           </h4>
@@ -193,22 +178,31 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
           </div>
         </div>
 
+        {/* How to Use Card (Matching Image 2 & 3) */}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-card p-4 sm:p-5 space-y-3">
+          <h3 className="text-sm font-bold text-gray-900">How to use</h3>
+          <div className="space-y-3">
+            {howToUseSteps.map((step, index) => (
+              <div key={index} className="flex items-start gap-2.5 text-xs sm:text-[13px] text-gray-700 leading-relaxed">
+                <span className="w-5 h-5 rounded-full bg-[#EDE5FC] text-[#601CEB] font-bold text-[10px] flex items-center justify-center flex-shrink-0 mt-0.5">
+                  {index + 1}
+                </span>
+                <p>{step}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Terms and Conditions Card Matching Image 3 */}
-        <div className="bg-white rounded-3xl p-5 border border-gray-100 shadow-card space-y-3">
-          <h4 className="text-sm font-bold text-gray-900">Terms and Conditions</h4>
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-card p-4 sm:p-5 space-y-3">
+          <h3 className="text-sm font-bold text-gray-900">Terms and Conditions</h3>
           <div className="space-y-2.5">
-            <div className="flex items-start gap-2.5 text-xs sm:text-[13px] text-gray-600 leading-relaxed">
-              <span className="text-[#601CEB] font-bold">✓</span>
-              <p>Comes with 12 months official manufacturer warranty across India.</p>
-            </div>
-            <div className="flex items-start gap-2.5 text-xs sm:text-[13px] text-gray-600 leading-relaxed">
-              <span className="text-[#601CEB] font-bold">✓</span>
-              <p>Zero foreclosure charges if you decide to pay your EMI dues early.</p>
-            </div>
-            <div className="flex items-start gap-2.5 text-xs sm:text-[13px] text-gray-600 leading-relaxed">
-              <span className="text-[#601CEB] font-bold">✓</span>
-              <p>Mutual Fund units remain 100% invested in your folio and continue earning returns.</p>
-            </div>
+            {termsPoints.map((point, index) => (
+              <div key={index} className="flex items-start gap-2.5 text-xs sm:text-[13px] text-gray-600 leading-relaxed">
+                <CheckCircle2 className="w-4 h-4 text-[#601CEB] flex-shrink-0 mt-0.5" />
+                <p>{point}</p>
+              </div>
+            ))}
           </div>
 
           <div className="pt-2 border-t border-gray-100">
@@ -218,9 +212,37 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
               className="flex items-center justify-between w-full text-xs font-bold text-[#601CEB] hover:text-[#4E12C8] py-1"
             >
               <span>View All</span>
-              <span className="text-sm font-extrabold">›</span>
+              <ChevronRight className="w-4 h-4 stroke-[2.5]" />
             </button>
           </div>
+        </div>
+      </div>
+
+      {/* Floating Sticky Bottom Bar (Matching Images 1 & 2) */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-gray-100 px-4 py-3 shadow-elevated">
+        <div className="max-w-md mx-auto flex items-center gap-3">
+          {/* Circular Share Button */}
+          <button
+            type="button"
+            onClick={handleShare}
+            className="w-12 h-12 rounded-full border border-purple-200 hover:border-[#601CEB] text-[#601CEB] hover:bg-purple-50 flex items-center justify-center flex-shrink-0 transition-colors"
+            title="Share"
+          >
+            <Share2 className="w-5 h-5 stroke-[2]" />
+          </button>
+
+          {/* Continue CTA Button */}
+          <button
+            type="button"
+            onClick={() => setIsPledgeModalOpen(true)}
+            className="flex-1 py-3.5 px-6 rounded-full bg-[#601CEB] hover:bg-[#4E12C8] text-white text-sm font-bold shadow-md transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
+          >
+            <span>Continue</span>
+            <span className="text-xs font-medium text-purple-200">
+              (₹{formatINR(selectedPlan.monthlyPayment)}/mo)
+            </span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
       </div>
 
@@ -230,39 +252,6 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
         onClose={() => setIsTermsOpen(false)}
         brandName={product.name}
       />
-
-      {/* Sticky Bottom Action Bar (Proceed with selected plan CTA) */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-gray-100 px-4 py-3 shadow-elevated">
-        <div className="max-w-md mx-auto flex items-center justify-between gap-4">
-          <div className="min-w-0">
-            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">
-              Selected Plan
-            </span>
-            <div className="flex items-baseline gap-1">
-              <span className="text-lg sm:text-xl font-extrabold text-gray-950 tracking-tight">
-                ₹{formatINR(selectedPlan.monthlyPayment)}
-              </span>
-              <span className="text-xs text-gray-500 font-semibold">
-                / mo ({selectedPlan.tenureMonths}m)
-              </span>
-            </div>
-            {selectedPlan.isNoCost && (
-              <span className="text-[10px] text-emerald-700 font-bold">
-                0% Interest No-Cost EMI
-              </span>
-            )}
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setIsPledgeModalOpen(true)}
-            className="flex-1 max-w-[220px] py-3.5 px-4 rounded-full bg-[#601CEB] hover:bg-[#4E12C8] text-white text-xs sm:text-sm font-bold shadow-md transition-all flex items-center justify-center gap-1.5 active:scale-95"
-          >
-            <span>Proceed with plan</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
 
       {/* Mutual Fund Pledge Summary Modal */}
       {isPledgeModalOpen && (
@@ -280,4 +269,3 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
     </div>
   );
 };
-

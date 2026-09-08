@@ -79,3 +79,4 @@ export const TermsBottomSheet: React.FC<TermsBottomSheetProps> = ({
     </div>
   );
 };
+
