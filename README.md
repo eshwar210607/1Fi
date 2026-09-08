@@ -1,3 +1,4 @@
+# 1Fi
 # 1Fi Marketplace — SDE Intern Assignment
 
 A pixel-perfect full-stack implementation of the **1Fi Marketplace** feature integrated directly into the **Shop** page of the **1Fi** application.
