@@ -6,9 +6,8 @@
 
 ## 🔗 Live Links
 
-* **Live Demo Hosted on Vercel**: `https://1fi-marketplace.vercel.app` *(Replace with your deployed URL)*
-* **Demo Video Walkthrough**: `https://drive.google.com/file/d/...` *(Replace with your Google Drive / YouTube link)*
-* **GitHub Repository**: `https://github.com/<your-username>/1Fi`
+* **Live Demo Hosted on Vercel**: [https://1-fi-roan.vercel.app/](https://1-fi-roan.vercel.app/)
+* **GitHub Repository**: [https://github.com/eshwar210607/1Fi](https://github.com/eshwar210607/1Fi)
 
 ---
 
@@ -359,20 +358,6 @@ Processes mutual fund pledge lock and confirms order placement.
    npm run build
    npm start
    ```
-
----
-
-## 🌐 Deploy to Vercel (1-Click Guide)
-
-1. Push your code to your GitHub repository:
-   ```bash
-   git push origin main
-   ```
-2. Go to [vercel.com](https://vercel.com) and log in with GitHub.
-3. Click **"Add New Project"** and import the `1Fi` repository.
-4. Next.js preset will be automatically detected. Leave build settings as default.
-5. Click **"Deploy"**.
-6. Copy your live deployment URL (e.g., `https://1fi-marketplace.vercel.app`) and paste it into the **Live Links** section at the top of this `README.md`.
 
 ---
 
